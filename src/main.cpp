@@ -155,35 +155,35 @@ void setup() {
 
 void loop () {
  //Check to see if anything is available in the serial receive buffer
- while (Serial.available() > 0)
- {
-   static char message[MAX_MESSAGE_LENGTH];
-   static unsigned int message_pos = 0;
-   //Create a place to hold the incoming message
+//  while (Serial.available() > 0)
+//  {
+//    static char message[MAX_MESSAGE_LENGTH];
+//    static unsigned int message_pos = 0;
+//    //Create a place to hold the incoming message
 
-   //Read the next available byte in the serial receive buffer
-   char inByte = Serial.read();
+//    //Read the next available byte in the serial receive buffer
+//    char inByte = Serial.read();
 
-   //Message coming in (check not terminating character) and guard for over message size
-   if ( inByte != '\n' && (message_pos < MAX_MESSAGE_LENGTH - 1) )
-   {
-     //Add the incoming byte to our message
-     message[message_pos] = inByte;
-     message_pos++;
-   }
-   //Full message received...
-   else
-   {
-     //Add null character to string
-     message[message_pos] = '\0';
+//    //Message coming in (check not terminating character) and guard for over message size
+//    if ( inByte != '\n' && (message_pos < MAX_MESSAGE_LENGTH - 1) )
+//    {
+//      //Add the incoming byte to our message
+//      message[message_pos] = inByte;
+//      message_pos++;
+//    }
+//    //Full message received...
+//    else
+//    {
+//      //Add null character to string
+//      message[message_pos] = '\0';
 
-     //Print the message (or do other things)
-     Serial.println(message);
-    test = message;
-     //Reset for the next message
-     message_pos = 0;
-   }
- }
+//      //Print the message (or do other things)
+//      Serial.println(message);
+//     test = message;
+//      //Reset for the next message
+//      message_pos = 0;
+//    }
+//  }
   
   if (sbus_rx.Read()) {
     /* Grab the received data */
