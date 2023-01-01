@@ -20,8 +20,10 @@ bfs::SbusData data;
 #define SERVO_PWM_PIN 22
 
 int ZoomPWMValDesired = 17;
-
+// #DEFINE PWM_8_BIT
+#define PWM_16_BIT
 // 8 int values for Zoom possitions
+#ifdef PWM_8_BIT
 int16_t Zoom12Val = 17;
 int16_t Zoom14Val = 19;
 int16_t Zoom15Val = 20;
@@ -30,6 +32,18 @@ int16_t Zoom25Val = 25;
 int16_t Zoom30Val = 28;
 int16_t Zoom35Val = 31;
 int16_t Zoom40Val = 34;
+#endif
+#ifdef PWM_16_BIT
+int16_t Zoom12Val = 2220;
+int16_t Zoom14Val = 2472;
+int16_t Zoom15Val = 2630;
+int16_t Zoom18Val = 2855;
+int16_t Zoom25Val = 3253;
+int16_t Zoom30Val = 3624;
+int16_t Zoom35Val = 3975;
+int16_t Zoom40Val = 4400;
+#endif
+
 
 // ISR Functions to set the Zoom Values
 void Zoom12()
@@ -217,6 +231,11 @@ void setup()
   // set PWM freq to 66Hz
   analogWriteFrequency(SERVO_PWM_PIN, 66);
 
+  #ifdef PWM_16_BIT
+  // set PWM resolution to 15 bits
+  analogWriteResolution(15);
+  #endif
+
   // Setup Complete
   Serial.println("Setup Complete");
 }
@@ -246,6 +265,7 @@ void loop()
   // Map the focus know value to a SBUS value
   int FocusMapped = map(FocusRaw, 0, 1024, 462, 985);
 
+      // analogWrite(SERVO_PWM_PIN, FocusMapped);
   // set FocusMapped to sbus channel 3
   data.ch[2] = FocusMapped;
 
@@ -256,7 +276,7 @@ void loop()
   // save the current time
   unsigned long currentMillisZoom = millis();
   // if 500ms have passed since the last time the loop ran
-  if (currentMillisZoom - previousMillisZoom >= 500)
+  if (currentMillisZoom - previousMillisZoom >= 1)
   {
     // save the last time the loop ran
     previousMillisZoom = currentMillisZoom;
