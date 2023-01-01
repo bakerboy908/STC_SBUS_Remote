@@ -185,26 +185,26 @@ void loop () {
 //    }
 //  }
   
-  if (sbus_rx.Read()) {
-    /* Grab the received data */
-    data = sbus_rx.data();
-    /* Display the received data */
-    // for (int8_t i = 0; i < 4; i++) {
+  // if (sbus_rx.Read()) {
+  //   /* Grab the received data */
+  //   data = sbus_rx.data();
+  //   /* Display the received data */
+  //   // for (int8_t i = 0; i < 4; i++) {
       
-    //   Serial.print(" Chanel: ");
-    //   Serial.print(i);
-    //   Serial.print(" Data: ");
-    //   Serial.print(data.ch[i]);
-    // }
-    //   Serial.println();
+  //   //   Serial.print(" Chanel: ");
+  //   //   Serial.print(i);
+  //   //   Serial.print(" Data: ");
+  //   //   Serial.print(data.ch[i]);
+  //   // }
+  //   //   Serial.println();
 
-    // data.ch[1] += 1; 
-    /* Set the SBUS TX data to the received data */
-    data.ch[1] = test.toInt();
-    sbus_tx.data(data);
-    /* Write the data to the servos */
-    sbus_tx.Write();
+  //   // data.ch[1] += 1; 
+  //   /* Set the SBUS TX data to the received data */
+  //   data.ch[1] = test.toInt();
+  //   sbus_tx.data(data);
+  //   /* Write the data to the servos */
+  //   sbus_tx.Write();
 
-  }
+  // }
   }
 
