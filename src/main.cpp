@@ -16,8 +16,10 @@ bfs::SbusData data;
 // Data Channel 1 = Iris
 // Data Channel 2 = Focus
 #define DEFAULTS_BUTTON 2
-#define FOCUS_KNOB_PIN 23
+#define FOCUS_KNOB_PIN 21
 #define SERVO_PWM_PIN 22
+
+#define DEBOUNCE_DELAY 100
 
 int ZoomPWMValDesired = 17;
 // #DEFINE PWM_8_BIT
@@ -44,46 +46,109 @@ int16_t Zoom35Val = 3975;
 int16_t Zoom40Val = 4400;
 #endif
 
-
 // ISR Functions to set the Zoom Values
 void Zoom12()
 {
-  ZoomPWMValDesired = Zoom12Val;
+  static long lastpressedTime = 0;
+  static long debounceDelay = DEBOUNCE_DELAY;
+  long pressedTime = millis();
+  if (pressedTime - lastpressedTime > debounceDelay)
+  {
+    lastpressedTime = pressedTime;
+    ZoomPWMValDesired = Zoom12Val;
+    Serial.println("Zoom 12");
+  }
 }
 
 void Zoom14()
 {
-  ZoomPWMValDesired = Zoom14Val;
+  static long lastpressedTime = 0;
+  static long debounceDelay = DEBOUNCE_DELAY;
+  long pressedTime = millis();
+  if (pressedTime - lastpressedTime > debounceDelay)
+  {
+    lastpressedTime = pressedTime;
+    ZoomPWMValDesired = Zoom14Val;
+    Serial.println("Zoom 14");
+  }
 }
 
 void Zoom15()
 {
-  ZoomPWMValDesired = Zoom15Val;
+  static long lastpressedTime = 0;
+  static long debounceDelay = DEBOUNCE_DELAY;
+  long pressedTime = millis();
+  if (pressedTime - lastpressedTime > debounceDelay)
+  {
+    lastpressedTime = pressedTime;
+    ZoomPWMValDesired = Zoom15Val;
+    Serial.println("Zoom 15");
+  }
 }
 
 void Zoom18()
 {
-  ZoomPWMValDesired = Zoom18Val;
+  static long lastpressedTime = 0;
+  static long debounceDelay = DEBOUNCE_DELAY;
+  long pressedTime = millis();
+  if (pressedTime - lastpressedTime > debounceDelay)
+  {
+    lastpressedTime = pressedTime;
+    ZoomPWMValDesired = Zoom18Val;
+    Serial.println("Zoom 18");
+  }
 }
 
 void Zoom25()
 {
-  ZoomPWMValDesired = Zoom25Val;
+  static long lastpressedTime = 0;
+  static long debounceDelay = DEBOUNCE_DELAY;
+  long pressedTime = millis();
+  if (pressedTime - lastpressedTime > debounceDelay)
+  {
+    lastpressedTime = pressedTime;
+    ZoomPWMValDesired = Zoom25Val;
+    Serial.println("Zoom 25");
+  }
 }
 
 void Zoom30()
 {
-  ZoomPWMValDesired = Zoom30Val;
+  static long lastpressedTime = 0;
+  static long debounceDelay = DEBOUNCE_DELAY;
+  long pressedTime = millis();
+  if (pressedTime - lastpressedTime > debounceDelay)
+  {
+    lastpressedTime = pressedTime;
+    ZoomPWMValDesired = Zoom30Val;
+    Serial.println("Zoom 30");
+  }
 }
 
 void Zoom35()
 {
-  ZoomPWMValDesired = Zoom35Val;
+  static long lastpressedTime = 0;
+  static long debounceDelay = DEBOUNCE_DELAY;
+  long pressedTime = millis();
+  if (pressedTime - lastpressedTime > debounceDelay)
+  {
+    lastpressedTime = pressedTime;
+    ZoomPWMValDesired = Zoom35Val;
+    Serial.println("Zoom 35");
+  }
 }
 
 void Zoom40()
 {
-  ZoomPWMValDesired = Zoom40Val;
+  static long lastpressedTime = 0;
+  static long debounceDelay = DEBOUNCE_DELAY;
+  long pressedTime = millis();
+  if (pressedTime - lastpressedTime > debounceDelay)
+  {
+    lastpressedTime = pressedTime;
+    ZoomPWMValDesired = Zoom40Val;
+    Serial.println("Zoom 40");
+  }
 }
 // 10 int16_t values for Iris possitions
 int16_t Iris_2_8_Val = 324;
@@ -99,78 +164,152 @@ int16_t Iris_8_7_Val = 1106;
 
 // ISR Function to set the Iris Value
 
-//debouncing function
-
+// debouncing function
 
 void Iris_2_8()
 {
-  //run if havent run in
-
-
-  data.ch[1] = Iris_2_8_Val;
-  Serial.println("Iris 2.8");
+  static long lastpressedTime = 0;
+  static long debounceDelay = DEBOUNCE_DELAY;
+  long pressedTime = millis();
+  if (pressedTime - lastpressedTime > debounceDelay)
+  {
+    lastpressedTime = pressedTime;
+    data.ch[1] = Iris_2_8_Val;
+    Serial.println("Iris 2.8");
+  }
 }
 
 void Iris_3_2()
 {
-  data.ch[1] = Iris_3_2_Val;
-  Serial.println("Iris 3.2");
+  static long lastpressedTime = 0;
+  static long debounceDelay = DEBOUNCE_DELAY;
+  long pressedTime = millis();
+  if (pressedTime - lastpressedTime > debounceDelay)
+  {
+    lastpressedTime = pressedTime;
+    data.ch[1] = Iris_3_2_Val;
+    Serial.println("Iris 3.2");
+  }
 }
 
 void Iris_4_0()
 {
-  data.ch[1] = Iris_4_0_Val;
-  Serial.println("Iris 4.0");
+  static long lastpressedTime = 0;
+  static long debounceDelay = DEBOUNCE_DELAY;
+  long pressedTime = millis();
+  if (pressedTime - lastpressedTime > debounceDelay)
+  {
+    lastpressedTime = pressedTime;
+    data.ch[1] = Iris_4_0_Val;
+    Serial.println("Iris 4.0");
+  }
 }
 
 void Iris_4_5()
 {
-  data.ch[1] = Iris_4_5_Val;
-  Serial.println("Iris 4.5");
+  static long lastpressedTime = 0;
+  static long debounceDelay = DEBOUNCE_DELAY;
+  long pressedTime = millis();
+  if (pressedTime - lastpressedTime > debounceDelay)
+  {
+    lastpressedTime = pressedTime;
+    data.ch[1] = Iris_4_5_Val;
+    Serial.println("Iris 4.5");
+  }
 }
 
 void Iris_4_8()
 {
-  data.ch[1] = Iris_4_8_Val;
-  Serial.println("Iris 4.8");
+  static long lastpressedTime = 0;
+  static long debounceDelay = DEBOUNCE_DELAY;
+  long pressedTime = millis();
+  if (pressedTime - lastpressedTime > debounceDelay)
+  {
+    lastpressedTime = pressedTime;
+    data.ch[1] = Iris_4_8_Val;
+    Serial.println("Iris 4.8");
+  }
 }
 
 void Iris_5_6()
 {
-  data.ch[1] = Iris_5_6_Val;
-  Serial.println("Iris 5.6");
+  static long lastpressedTime = 0;
+  static long debounceDelay = DEBOUNCE_DELAY;
+  long pressedTime = millis();
+  if (pressedTime - lastpressedTime > debounceDelay)
+  {
+    lastpressedTime = pressedTime;
+    data.ch[1] = Iris_5_6_Val;
+    Serial.println("Iris 5.6");
+  }
 }
 
 void Iris_6_2()
 {
-  data.ch[1] = Iris_6_2_Val;
-  Serial.println("Iris 6.2");
+  static long lastpressedTime = 0;
+  static long debounceDelay = DEBOUNCE_DELAY;
+  long pressedTime = millis();
+  if (pressedTime - lastpressedTime > debounceDelay)
+  {
+    lastpressedTime = pressedTime;
+    data.ch[1] = Iris_6_2_Val;
+    Serial.println("Iris 6.2");
+  }
 }
 
 void Iris_6_7()
 {
-  data.ch[1] = Iris_6_7_Val;
-  Serial.println("Iris 6.7");
+  static long lastpressedTime = 0;
+  static long debounceDelay = DEBOUNCE_DELAY;
+  long pressedTime = millis();
+  if (pressedTime - lastpressedTime > debounceDelay)
+  {
+    lastpressedTime = pressedTime;
+    data.ch[1] = Iris_6_7_Val;
+    Serial.println("Iris 6.7");
+  }
 }
 
 void Iris_7_3()
 {
-  data.ch[1] = Iris_7_3_Val;
-  Serial.println("Iris 7.3");
+  static long lastpressedTime = 0;
+  static long debounceDelay = DEBOUNCE_DELAY;
+  long pressedTime = millis();
+  if (pressedTime - lastpressedTime > debounceDelay)
+  {
+    lastpressedTime = pressedTime;
+    data.ch[1] = Iris_7_3_Val;
+    Serial.println("Iris 7.3");
+  }
 }
 
 void Iris_8_7()
 {
-  data.ch[1] = Iris_8_7_Val;
-  Serial.println("Iris 8.7");
+  static long lastpressedTime = 0;
+  static long debounceDelay = DEBOUNCE_DELAY;
+  long pressedTime = millis();
+  if (pressedTime - lastpressedTime > debounceDelay)
+  {
+    lastpressedTime = pressedTime;
+    data.ch[1] = Iris_8_7_Val;
+    Serial.println("Iris 8.7");
+  }
 }
 // Default values for the Zoom and Iris
 
 // Defaults ISR
 void Defaults()
 {
-  ZoomPWMValDesired= Zoom12Val;
-  data.ch[1] = Iris_2_8_Val;
+  static long lastpressedTime = 0;
+  static long debounceDelay = DEBOUNCE_DELAY;
+  long pressedTime = millis();
+  if (pressedTime - lastpressedTime > debounceDelay)
+  {
+    lastpressedTime = pressedTime;
+    ZoomPWMValDesired = Zoom12Val;
+    data.ch[1] = Iris_2_8_Val;
+    Serial.println("Defaults");
+  }
 }
 
 // Function to read values from Sbus and print to serial
@@ -196,9 +335,10 @@ void readSbus()
 void setup()
 {
   // List of all ISR functions, enables attaching ISR's in a loop
+  // This Sets the order that the buttons are on the board, starting with bottom left and going clockwise
   void (*isrList[])() = {Zoom12, Zoom14, Zoom15, Zoom18, Zoom25, Zoom30, Zoom35,
-                         Zoom40, Iris_2_8, Iris_3_2, Iris_4_0, Iris_4_5, Iris_4_8,
-                         Iris_5_6, Iris_6_2, Iris_6_7, Iris_7_3, Iris_8_7, Defaults};
+                         Zoom40, Defaults, Iris_8_7, Iris_7_3, Iris_6_7, Iris_6_2,
+                         Iris_5_6, Iris_4_8, Iris_4_5, Iris_4_0, Iris_3_2, Iris_2_8};
 
   /* Serial to display data */
   Serial.begin(115200);
@@ -231,10 +371,10 @@ void setup()
   // set PWM freq to 66Hz
   analogWriteFrequency(SERVO_PWM_PIN, 66);
 
-  #ifdef PWM_16_BIT
+#ifdef PWM_16_BIT
   // set PWM resolution to 15 bits
   analogWriteResolution(15);
-  #endif
+#endif
 
   // Setup Complete
   Serial.println("Setup Complete");
@@ -262,10 +402,11 @@ void loop()
   // Focus Control
   // Read the focus know value
   int FocusRaw = analogRead(FOCUS_KNOB_PIN);
+
   // Map the focus know value to a SBUS value
   int FocusMapped = map(FocusRaw, 0, 1024, 462, 985);
 
-      // analogWrite(SERVO_PWM_PIN, FocusMapped);
+  // analogWrite(SERVO_PWM_PIN, FocusMapped);
   // set FocusMapped to sbus channel 3
   data.ch[2] = FocusMapped;
 
@@ -291,7 +432,7 @@ void loop()
       {
         ZoomPWMVal--;
       }
-      //Update the servo PWM value
+      // Update the servo PWM value
       analogWrite(SERVO_PWM_PIN, ZoomPWMVal);
     }
   }
