@@ -4,9 +4,9 @@
 // #include "typedef.hs"
 // https://arduino-projekte.info/wp-content/uploads/2020/12/D1_mini_ESP32_pinout.jpg
 /* SBUS object, reading SBUS */
-bfs::SbusRx sbus_rx(&Serial1);
+// bfs::SbusRx sbus_rx(&Serial1);
 /* SBUS object, writing SBUS */
-bfs::SbusTx sbus_tx(&Serial1);
+// bfs::SbusTx sbus_tx(&Serial1);
 /* SBUS data */
 bfs::SbusData data;
 
@@ -18,6 +18,8 @@ bfs::SbusData data;
 #define DEFAULTS_BUTTON 2
 #define FOCUS_KNOB_PIN 21
 #define SERVO_PWM_PIN 22
+
+#define HC_12_SETPIN 22
 
 #define DEBOUNCE_DELAY 100
 
@@ -56,6 +58,7 @@ void Zoom12()
   {
     lastpressedTime = pressedTime;
     ZoomPWMValDesired = Zoom12Val;
+    data.ch[0] = Zoom12Val;
     Serial.println("Zoom 12");
   }
 }
@@ -69,6 +72,7 @@ void Zoom14()
   {
     lastpressedTime = pressedTime;
     ZoomPWMValDesired = Zoom14Val;
+    data.ch[0] = Zoom14Val;
     Serial.println("Zoom 14");
   }
 }
@@ -82,6 +86,7 @@ void Zoom15()
   {
     lastpressedTime = pressedTime;
     ZoomPWMValDesired = Zoom15Val;
+    data.ch[0] = Zoom15Val;
     Serial.println("Zoom 15");
   }
 }
@@ -95,6 +100,7 @@ void Zoom18()
   {
     lastpressedTime = pressedTime;
     ZoomPWMValDesired = Zoom18Val;
+    data.ch[0] = Zoom18Val;
     Serial.println("Zoom 18");
   }
 }
@@ -108,6 +114,7 @@ void Zoom25()
   {
     lastpressedTime = pressedTime;
     ZoomPWMValDesired = Zoom25Val;
+    data.ch[0] = Zoom25Val;
     Serial.println("Zoom 25");
   }
 }
@@ -121,6 +128,7 @@ void Zoom30()
   {
     lastpressedTime = pressedTime;
     ZoomPWMValDesired = Zoom30Val;
+    data.ch[0] = Zoom30Val;
     Serial.println("Zoom 30");
   }
 }
@@ -134,6 +142,7 @@ void Zoom35()
   {
     lastpressedTime = pressedTime;
     ZoomPWMValDesired = Zoom35Val;
+    data.ch[0] = Zoom35Val;
     Serial.println("Zoom 35");
   }
 }
@@ -147,6 +156,7 @@ void Zoom40()
   {
     lastpressedTime = pressedTime;
     ZoomPWMValDesired = Zoom40Val;
+    data.ch[0] = Zoom40Val;
     Serial.println("Zoom 40");
   }
 }
@@ -307,30 +317,31 @@ void Defaults()
   {
     lastpressedTime = pressedTime;
     ZoomPWMValDesired = Zoom12Val;
+    data.ch[0] = ZoomPWMValDesired;
     data.ch[1] = Iris_2_8_Val;
     Serial.println("Defaults");
   }
 }
 
 // Function to read values from Sbus and print to serial
-void readSbus()
-{
-  if (sbus_rx.Read())
-  {
-    /* Grab the received data */
-    data = sbus_rx.data();
-    /* Display the received data */
-    for (int8_t i = 0; i < 4; i++)
-    {
+// void readSbus()
+// {
+//   if (sbus_rx.Read())
+//   {
+//     /* Grab the received data */
+//     data = sbus_rx.data();
+//     /* Display the received data */
+//     for (int8_t i = 0; i < 4; i++)
+//     {
 
-      Serial.print(" Chanel: ");
-      Serial.print(i);
-      Serial.print(" Data: ");
-      Serial.print(data.ch[i]);
-    }
-    Serial.println();
-  }
-}
+//       Serial.print(" Chanel: ");
+//       Serial.print(i);
+//       Serial.print(" Data: ");
+//       Serial.print(data.ch[i]);
+//     }
+//     Serial.println();
+//   }
+// }
 
 void setup()
 {
@@ -346,8 +357,8 @@ void setup()
   {
   }
   /* Begin the SBUS communication */
-  sbus_rx.Begin();
-  sbus_tx.Begin();
+  // sbus_rx.Begin();
+  // sbus_tx.Begin();
 
   Serial.println("SBUS RX/TX started");
   // Define pins 2 thru 22 as inputs with pullup resistors
@@ -371,6 +382,10 @@ void setup()
   // set PWM freq to 66Hz
   analogWriteFrequency(SERVO_PWM_PIN, 66);
 
+  Serial1.begin(9600);
+  pinMode(HC_12_SETPIN, OUTPUT);
+  digitalWrite(HC_12_SETPIN, HIGH);
+
 #ifdef PWM_16_BIT
   // set PWM resolution to 15 bits
   analogWriteResolution(15);
@@ -380,25 +395,36 @@ void setup()
   Serial.println("Setup Complete");
 }
 
+// rolling average function
+// takes in a int and retunrs the average of the last 10 values
+int rollingAverage(int val)
+{
+  static int rollingAverageArray[10];
+  static int rollingAverageIndex = 0;
+  static int rollingAverageSum = 0;
+  static int rollingAverageCount = 0;
+  static int rollingAverageVal = 0;
+
+  rollingAverageSum -= rollingAverageArray[rollingAverageIndex];
+  rollingAverageArray[rollingAverageIndex] = val;
+  rollingAverageSum += rollingAverageArray[rollingAverageIndex];
+  rollingAverageIndex++;
+  if (rollingAverageIndex >= 10)
+  {
+    rollingAverageIndex = 0;
+  }
+  if (rollingAverageCount < 10)
+  {
+    rollingAverageCount++;
+  }
+  rollingAverageVal = rollingAverageSum / rollingAverageCount;
+  return rollingAverageVal;
+}
+
 void loop()
 {
-
-  static unsigned long previousMillis = 0;
-  static int ZoomPWMVal = 17;
-
-  // save the current time
-  unsigned long currentMillis = millis();
-  // if 15ms have passed since the last time the loop ran
-  if (currentMillis - previousMillis >= 15)
-  {
-    // save the last time the loop ran
-    previousMillis = currentMillis;
-    // write the SBUS data
-    sbus_tx.data(data);
-    // Transmit SBUS data
-    sbus_tx.Write();
-  }
-
+  static bfs::SbusData lastData;
+  static int lastFocusedMapped = 0;
   // Focus Control
   // Read the focus know value
   int FocusRaw = analogRead(FOCUS_KNOB_PIN);
@@ -408,32 +434,74 @@ void loop()
 
   // analogWrite(SERVO_PWM_PIN, FocusMapped);
   // set FocusMapped to sbus channel 3
-  data.ch[2] = FocusMapped;
-
-  // Zoom Control
-  // If the desired zoom value is differnt from the current zoom value slowly change the zoom value until they match
-  // Only Check the zoom value every 500ms
-  static unsigned long previousMillisZoom = 0;
-  // save the current time
-  unsigned long currentMillisZoom = millis();
-  // if 500ms have passed since the last time the loop ran
-  if (currentMillisZoom - previousMillisZoom >= 1)
+  if (lastFocusedMapped - FocusMapped > 1 || lastFocusedMapped - FocusMapped < -1)
   {
-    // save the last time the loop ran
-    previousMillisZoom = currentMillisZoom;
-    // Check the zoom value
-    if (ZoomPWMValDesired != ZoomPWMVal)
-    {
-      if (ZoomPWMValDesired > ZoomPWMVal)
-      {
-        ZoomPWMVal++;
-      }
-      else if (ZoomPWMValDesired < ZoomPWMVal)
-      {
-        ZoomPWMVal--;
-      }
-      // Update the servo PWM value
-      analogWrite(SERVO_PWM_PIN, ZoomPWMVal);
-    }
+    lastFocusedMapped = FocusMapped;
+    data.ch[2] = FocusMapped;
   }
+
+  // if data has changed transmit it over serial1
+  if (data.ch[0] != lastData.ch[0] ||
+      data.ch[1] != lastData.ch[1] ||
+      data.ch[2] != lastData.ch[2] ||
+      data.ch[3] != lastData.ch[3])
+  {
+    Serial1.print("S");
+    Serial1.write(data.ch[0] & 0xFF);
+    Serial1.write(data.ch[0] >> 8);
+
+    Serial1.write(data.ch[1] & 0xFF);
+    Serial1.write(data.ch[1] >> 8);
+
+    Serial1.write(data.ch[2] & 0xFF);
+    Serial1.write(data.ch[2] >> 8);
+    Serial1.print("E");
+
+    // Serial1.write(data.ch[1]);
+    Serial.println(data.ch[0]);
+    lastData = data;
+  }
+
+  //   static unsigned long previousMillis = 0;
+  //   static int ZoomPWMVal = 17;
+
+  //   // save the current time
+  //   unsigned long currentMillis = millis();
+  //   // if 15ms have passed since the last time the loop ran
+  //   if (currentMillis - previousMillis >= 15)
+  //   {
+  //     // save the last time the loop ran
+  //     previousMillis = currentMillis;
+  //     // write the SBUS data
+  //     sbus_tx.data(data);
+  //     // Transmit SBUS data
+  //     sbus_tx.Write();
+  //   }
+
+  //   // Zoom Control
+  //   // If the desired zoom value is differnt from the current zoom value slowly change the zoom value until they match
+  //   // Only Check the zoom value every 500ms
+  //   static unsigned long previousMillisZoom = 0;
+  //   // save the current time
+  //   unsigned long currentMillisZoom = millis();
+  //   // if 500ms have passed since the last time the loop ran
+  //   if (currentMillisZoom - previousMillisZoom >= 1)
+  //   {
+  //     // save the last time the loop ran
+  //     previousMillisZoom = currentMillisZoom;
+  //     // Check the zoom value
+  //     if (ZoomPWMValDesired != ZoomPWMVal)
+  //     {
+  //       if (ZoomPWMValDesired > ZoomPWMVal)
+  //       {
+  //         ZoomPWMVal++;
+  //       }
+  //       else if (ZoomPWMValDesired < ZoomPWMVal)
+  //       {
+  //         ZoomPWMVal--;
+  //       }
+  //       // Update the servo PWM value
+  //       analogWrite(SERVO_PWM_PIN, ZoomPWMVal);
+  //     }
+  //   }
 }
