@@ -353,9 +353,7 @@ void setup()
 
   /* Serial to display data */
   Serial.begin(115200);
-  while (!Serial)
-  {
-  }
+
   /* Begin the SBUS communication */
   // sbus_rx.Begin();
   // sbus_tx.Begin();
@@ -421,24 +419,46 @@ int rollingAverage(int val)
   return rollingAverageVal;
 }
 
+int readStablePot(int potPin, int threshold) {
+  static int potVal = 0;
+  static int potLast = 0;
+
+  potVal = analogRead(potPin);
+
+  if (abs(potVal - potLast) > threshold) {  // check for significant change
+    potLast = potVal;
+  }
+
+  return potLast;
+}
+
 void loop()
 {
   static bfs::SbusData lastData;
   static int lastFocusedMapped = 0;
+  static long lastLoopTime = 0;
+  // If 10 ms has passsed since last loop
+  if (millis() - lastLoopTime > 20)
+  {
+
   // Focus Control
   // Read the focus know value
-  int FocusRaw = analogRead(FOCUS_KNOB_PIN);
+  int FocusRaw = readStablePot(FOCUS_KNOB_PIN, 3);
 
   // Map the focus know value to a SBUS value
   int FocusMapped = map(FocusRaw, 0, 1024, 462, 985);
 
   // analogWrite(SERVO_PWM_PIN, FocusMapped);
   // set FocusMapped to sbus channel 3
-  if (lastFocusedMapped - FocusMapped > 1 || lastFocusedMapped - FocusMapped < -1)
-  {
+  // if (lastFocusedMapped - FocusMapped > 1 || lastFocusedMapped - FocusMapped < -1)
+  // {
     lastFocusedMapped = FocusMapped;
     data.ch[2] = FocusMapped;
+  // }
   }
+
+
+
 
   // if data has changed transmit it over serial1
   if (data.ch[0] != lastData.ch[0] ||
@@ -458,7 +478,11 @@ void loop()
     Serial1.print("E");
 
     // Serial1.write(data.ch[1]);
-    Serial.println(data.ch[0]);
+    Serial.print(data.ch[0]);
+    Serial.print(" ");
+    Serial.print(data.ch[1]);
+    Serial.print(" ");
+    Serial.println(data.ch[2]);
     lastData = data;
   }
 
