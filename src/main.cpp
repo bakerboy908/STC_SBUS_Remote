@@ -342,9 +342,10 @@ void Defaults()
 //     Serial.println();
 //   }
 // }
-
+bool ChanelChangeMode = false;
 void setup()
 {
+  delay(3000);
   // List of all ISR functions, enables attaching ISR's in a loop
   // This Sets the order that the buttons are on the board, starting with bottom left and going clockwise
   void (*isrList[])() = {Zoom12, Zoom14, Zoom15, Zoom18, Zoom25, Zoom30, Zoom35,
@@ -365,13 +366,22 @@ void setup()
     pinMode(i, INPUT_PULLDOWN);
   }
   Serial.println("Pins 2 thru 22 set as inputs with pullup resistors");
-  // attach interupt to pin 2 thru 22
-  for (int i = 2; i < 21; i++)
+  if (digitalRead(11))
   {
-    attachInterrupt(digitalPinToInterrupt(i), isrList[i - 2], RISING);
+    Serial.println("Channel Change Mode!");
+    ChanelChangeMode = true;
   }
-  Serial.println("Interupts attached to pins 2 thru 22");
+  else
+  {
+    Serial.println("Normal Mode");
 
+    // attach interupt to pin 2 thru 22
+    for (int i = 2; i < 21; i++)
+    {
+      attachInterrupt(digitalPinToInterrupt(i), isrList[i - 2], RISING);
+      Serial.println("Interupts attached to pins 2 thru 22");
+    }
+  }
   // Set Focus know pin as analog input
   pinMode(FOCUS_KNOB_PIN, INPUT);
 
@@ -390,6 +400,7 @@ void setup()
 #endif
 
   // Setup Complete
+
   Serial.println("Setup Complete");
 }
 
@@ -419,113 +430,177 @@ int rollingAverage(int val)
   return rollingAverageVal;
 }
 
-int readStablePot(int potPin, int threshold) {
+int readStablePot(int potPin, int threshold)
+{
   static int potVal = 0;
   static int potLast = 0;
 
   potVal = analogRead(potPin);
 
-  if (abs(potVal - potLast) > threshold) {  // check for significant change
+  if (abs(potVal - potLast) > threshold)
+  { // check for significant change
     potLast = potVal;
   }
 
   return potLast;
 }
+void ChangeChannel(int Channel)
+{
+  // Put HC-12 in to command mode
+  digitalWrite(HC_12_SETPIN, LOW);
+  delay(100);
+  // Send command to change channel with extra leading zeros before channel number
+  Serial1.print("AT+C");
+  Serial1.print("0");
+  Serial1.print("0");
+  Serial1.println(Channel);
 
+  // Wait for response
+  delay(100);
+  // Put HC-12 back in to normal mode
+  digitalWrite(HC_12_SETPIN, HIGH);
+  delay(100);
+}
 void loop()
 {
-  static bfs::SbusData lastData;
-  static int lastFocusedMapped = 0;
-  static long lastLoopTime = 0;
-  // If 10 ms has passsed since last loop
-  if (millis() - lastLoopTime > 20)
+  if (ChanelChangeMode)
+  {
+    char array[3];
+    int buttonPressed = 0;
+    // Read all buttons 2 thru 10
+    for (int i = 2; i < 11; i++)
+    {
+      if (digitalRead(i) == HIGH)
+      {
+        buttonPressed = i - 1;
+      }
+    }
+    if (buttonPressed != 0)
+    {
+      delay(100);
+      Serial.print("C");
+      Serial.println(buttonPressed);
+      Serial1.print("C");
+      Serial1.print(buttonPressed);
+      Serial.println("Channel Change Requested");
+      while (Serial1.available() == 0)
+      {
+        /* code */
+      }
+
+      while (Serial1.available())
+      {
+        byte temp = Serial1.read();
+        Serial.println(temp);
+        Serial.println(buttonPressed );
+        if ((temp-'0') == buttonPressed ) // Receiver verified it got the message to change channel
+        {
+          ChangeChannel(buttonPressed);
+          ChanelChangeMode = false;
+          Serial.println("Channel Change Accepted");
+          while (true)
+          {
+            
+          }
+          
+        }
+      }
+    }
+    // Serial1.flush();
+  }
+  else
   {
 
-  // Focus Control
-  // Read the focus know value
-  int FocusRaw = readStablePot(FOCUS_KNOB_PIN, 3);
+    static bfs::SbusData lastData;
+    static int lastFocusedMapped = 0;
+    static long lastLoopTime = 0;
+    // If 10 ms has passsed since last loop
+    if (millis() - lastLoopTime > 20)
+    {
 
-  // Map the focus know value to a SBUS value
-  int FocusMapped = map(FocusRaw, 0, 1024, 462, 985);
+      // Focus Control
+      // Read the focus know value
+      int FocusRaw = readStablePot(FOCUS_KNOB_PIN, 3);
 
-  // analogWrite(SERVO_PWM_PIN, FocusMapped);
-  // set FocusMapped to sbus channel 3
-  // if (lastFocusedMapped - FocusMapped > 1 || lastFocusedMapped - FocusMapped < -1)
-  // {
-    lastFocusedMapped = FocusMapped;
-    data.ch[2] = FocusMapped;
-  // }
+      // Map the focus know value to a SBUS value
+      int FocusMapped = map(FocusRaw, 0, 1024, 462, 985);
+
+      // analogWrite(SERVO_PWM_PIN, FocusMapped);
+      // set FocusMapped to sbus channel 3
+      // if (lastFocusedMapped - FocusMapped > 1 || lastFocusedMapped - FocusMapped < -1)
+      // {
+      lastFocusedMapped = FocusMapped;
+      data.ch[2] = FocusMapped;
+      // }
+    }
+
+    // if data has changed transmit it over serial1
+    if (data.ch[0] != lastData.ch[0] ||
+        data.ch[1] != lastData.ch[1] ||
+        data.ch[2] != lastData.ch[2] ||
+        data.ch[3] != lastData.ch[3])
+    {
+      Serial1.print("S");
+      Serial1.write(data.ch[0] & 0xFF);
+      Serial1.write(data.ch[0] >> 8);
+
+      Serial1.write(data.ch[1] & 0xFF);
+      Serial1.write(data.ch[1] >> 8);
+
+      Serial1.write(data.ch[2] & 0xFF);
+      Serial1.write(data.ch[2] >> 8);
+      Serial1.print("E");
+
+      // Serial1.write(data.ch[1]);
+      Serial.print(data.ch[0]);
+      Serial.print(" ");
+      Serial.print(data.ch[1]);
+      Serial.print(" ");
+      Serial.println(data.ch[2]);
+      lastData = data;
+    }
+
+    //   static unsigned long previousMillis = 0;
+    //   static int ZoomPWMVal = 17;
+
+    //   // save the current time
+    //   unsigned long currentMillis = millis();
+    //   // if 15ms have passed since the last time the loop ran
+    //   if (currentMillis - previousMillis >= 15)
+    //   {
+    //     // save the last time the loop ran
+    //     previousMillis = currentMillis;
+    //     // write the SBUS data
+    //     sbus_tx.data(data);
+    //     // Transmit SBUS data
+    //     sbus_tx.Write();
+    //   }
+
+    //   // Zoom Control
+    //   // If the desired zoom value is differnt from the current zoom value slowly change the zoom value until they match
+    //   // Only Check the zoom value every 500ms
+    //   static unsigned long previousMillisZoom = 0;
+    //   // save the current time
+    //   unsigned long currentMillisZoom = millis();
+    //   // if 500ms have passed since the last time the loop ran
+    //   if (currentMillisZoom - previousMillisZoom >= 1)
+    //   {
+    //     // save the last time the loop ran
+    //     previousMillisZoom = currentMillisZoom;
+    //     // Check the zoom value
+    //     if (ZoomPWMValDesired != ZoomPWMVal)
+    //     {
+    //       if (ZoomPWMValDesired > ZoomPWMVal)
+    //       {
+    //         ZoomPWMVal++;
+    //       }
+    //       else if (ZoomPWMValDesired < ZoomPWMVal)
+    //       {
+    //         ZoomPWMVal--;
+    //       }
+    //       // Update the servo PWM value
+    //       analogWrite(SERVO_PWM_PIN, ZoomPWMVal);
+    //     }
+    //   }
   }
-
-
-
-
-  // if data has changed transmit it over serial1
-  if (data.ch[0] != lastData.ch[0] ||
-      data.ch[1] != lastData.ch[1] ||
-      data.ch[2] != lastData.ch[2] ||
-      data.ch[3] != lastData.ch[3])
-  {
-    Serial1.print("S");
-    Serial1.write(data.ch[0] & 0xFF);
-    Serial1.write(data.ch[0] >> 8);
-
-    Serial1.write(data.ch[1] & 0xFF);
-    Serial1.write(data.ch[1] >> 8);
-
-    Serial1.write(data.ch[2] & 0xFF);
-    Serial1.write(data.ch[2] >> 8);
-    Serial1.print("E");
-
-    // Serial1.write(data.ch[1]);
-    Serial.print(data.ch[0]);
-    Serial.print(" ");
-    Serial.print(data.ch[1]);
-    Serial.print(" ");
-    Serial.println(data.ch[2]);
-    lastData = data;
-  }
-
-  //   static unsigned long previousMillis = 0;
-  //   static int ZoomPWMVal = 17;
-
-  //   // save the current time
-  //   unsigned long currentMillis = millis();
-  //   // if 15ms have passed since the last time the loop ran
-  //   if (currentMillis - previousMillis >= 15)
-  //   {
-  //     // save the last time the loop ran
-  //     previousMillis = currentMillis;
-  //     // write the SBUS data
-  //     sbus_tx.data(data);
-  //     // Transmit SBUS data
-  //     sbus_tx.Write();
-  //   }
-
-  //   // Zoom Control
-  //   // If the desired zoom value is differnt from the current zoom value slowly change the zoom value until they match
-  //   // Only Check the zoom value every 500ms
-  //   static unsigned long previousMillisZoom = 0;
-  //   // save the current time
-  //   unsigned long currentMillisZoom = millis();
-  //   // if 500ms have passed since the last time the loop ran
-  //   if (currentMillisZoom - previousMillisZoom >= 1)
-  //   {
-  //     // save the last time the loop ran
-  //     previousMillisZoom = currentMillisZoom;
-  //     // Check the zoom value
-  //     if (ZoomPWMValDesired != ZoomPWMVal)
-  //     {
-  //       if (ZoomPWMValDesired > ZoomPWMVal)
-  //       {
-  //         ZoomPWMVal++;
-  //       }
-  //       else if (ZoomPWMValDesired < ZoomPWMVal)
-  //       {
-  //         ZoomPWMVal--;
-  //       }
-  //       // Update the servo PWM value
-  //       analogWrite(SERVO_PWM_PIN, ZoomPWMVal);
-  //     }
-  //   }
 }
