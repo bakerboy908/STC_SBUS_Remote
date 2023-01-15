@@ -1,0 +1,77 @@
+Change Component Footprint: Designator=SW1 Old Footprint=CHRY-MX1A-11NW_V New Footprint=CHRY-MX1A-11NW_V
+Change Component Footprint: Designator=SW2 Old Footprint=CHRY-MX1A-11NW_V New Footprint=CHRY-MX1A-11NW_V
+Change Component Footprint: Designator=SW3 Old Footprint=CHRY-MX1A-11NW_V New Footprint=CHRY-MX1A-11NW_V
+Change Component Footprint: Designator=SW4 Old Footprint=CHRY-MX1A-11NW_V New Footprint=CHRY-MX1A-11NW_V
+Change Component Footprint: Designator=SW5 Old Footprint=CHRY-MX1A-11NW_V New Footprint=CHRY-MX1A-11NW_V
+Change Component Footprint: Designator=SW6 Old Footprint=CHRY-MX1A-11NW_V New Footprint=CHRY-MX1A-11NW_V
+Change Component Footprint: Designator=SW7 Old Footprint=CHRY-MX1A-11NW_V New Footprint=CHRY-MX1A-11NW_V
+Change Component Footprint: Designator=SW8 Old Footprint=CHRY-MX1A-11NW_V New Footprint=CHRY-MX1A-11NW_V
+Change Component Footprint: Designator=SW11 Old Footprint=CHRY-MX1A-11NW_V New Footprint=CHRY-MX1A-11NW_V
+Change Component Footprint: Designator=SW12 Old Footprint=CHRY-MX1A-11NW_V New Footprint=CHRY-MX1A-11NW_V
+Change Component Footprint: Designator=SW13 Old Footprint=CHRY-MX1A-11NW_V New Footprint=CHRY-MX1A-11NW_V
+Change Component Footprint: Designator=SW14 Old Footprint=CHRY-MX1A-11NW_V New Footprint=CHRY-MX1A-11NW_V
+Change Component Footprint: Designator=SW15 Old Footprint=CHRY-MX1A-11NW_V New Footprint=CHRY-MX1A-11NW_V
+Change Component Footprint: Designator=SW16 Old Footprint=CHRY-MX1A-11NW_V New Footprint=CHRY-MX1A-11NW_V
+Change Component Footprint: Designator=SW17 Old Footprint=CHRY-MX1A-11NW_V New Footprint=CHRY-MX1A-11NW_V
+Change Component Footprint: Designator=SW18 Old Footprint=CHRY-MX1A-11NW_V New Footprint=CHRY-MX1A-11NW_V
+Change Component Footprint: Designator=SW19 Old Footprint=CHRY-MX1A-11NW_V New Footprint=CHRY-MX1A-11NW_V
+Change Component Footprint: Designator=SW20 Old Footprint=CHRY-MX1A-11NW_V New Footprint=CHRY-MX1A-11NW_V
+Change Component Footprint: Designator=SW21 Old Footprint=CHRY-MX1A-11NW_V New Footprint=CHRY-MX1A-11NW_V
+Change Component Comment : Designator=SW1 Old Comment=MX1A-11NW New Comment=KEYSW-SPST-2
+Change Component Comment : Designator=SW2 Old Comment=MX1A-11NW New Comment=KEYSW-SPST-2
+Change Component Comment : Designator=SW3 Old Comment=MX1A-11NW New Comment=KEYSW-SPST-2
+Change Component Comment : Designator=SW4 Old Comment=MX1A-11NW New Comment=KEYSW-SPST-2
+Change Component Comment : Designator=SW5 Old Comment=MX1A-11NW New Comment=KEYSW-SPST-2
+Change Component Comment : Designator=SW6 Old Comment=MX1A-11NW New Comment=KEYSW-SPST-2
+Change Component Comment : Designator=SW7 Old Comment=MX1A-11NW New Comment=KEYSW-SPST-2
+Change Component Comment : Designator=SW8 Old Comment=MX1A-11NW New Comment=KEYSW-SPST-2
+Change Component Comment : Designator=SW11 Old Comment=MX1A-11NW New Comment=KEYSW-SPST-2
+Change Component Comment : Designator=SW12 Old Comment=MX1A-11NW New Comment=KEYSW-SPST-2
+Change Component Comment : Designator=SW13 Old Comment=MX1A-11NW New Comment=KEYSW-SPST-2
+Change Component Comment : Designator=SW14 Old Comment=MX1A-11NW New Comment=KEYSW-SPST-2
+Change Component Comment : Designator=SW15 Old Comment=MX1A-11NW New Comment=KEYSW-SPST-2
+Change Component Comment : Designator=SW16 Old Comment=MX1A-11NW New Comment=KEYSW-SPST-2
+Change Component Comment : Designator=SW17 Old Comment=MX1A-11NW New Comment=KEYSW-SPST-2
+Change Component Comment : Designator=SW18 Old Comment=MX1A-11NW New Comment=KEYSW-SPST-2
+Change Component Comment : Designator=SW19 Old Comment=MX1A-11NW New Comment=KEYSW-SPST-2
+Change Component Comment : Designator=SW20 Old Comment=MX1A-11NW New Comment=KEYSW-SPST-2
+Change Component Comment : Designator=SW21 Old Comment=MX1A-11NW New Comment=KEYSW-SPST-2
+Change Managed Component Library Link : Designator=SW1 Old VaultGUID=B7D15EC3-160A-466F-A46C-7801FE6295A7 New VaultGUID= Old ItemGUID=EBC1D12C-8232-4156-824C-C0951DE655D5 New ItemGUID= Old RevisionGUID=1D5E4378-CACA-417B-970E-3CCBBBA53AC5 New RevisionGUID=
+Change Managed Component Library Link : Designator=SW2 Old VaultGUID=B7D15EC3-160A-466F-A46C-7801FE6295A7 New VaultGUID= Old ItemGUID=EBC1D12C-8232-4156-824C-C0951DE655D5 New ItemGUID= Old RevisionGUID=1D5E4378-CACA-417B-970E-3CCBBBA53AC5 New RevisionGUID=
+Change Managed Component Library Link : Designator=SW3 Old VaultGUID=B7D15EC3-160A-466F-A46C-7801FE6295A7 New VaultGUID= Old ItemGUID=EBC1D12C-8232-4156-824C-C0951DE655D5 New ItemGUID= Old RevisionGUID=1D5E4378-CACA-417B-970E-3CCBBBA53AC5 New RevisionGUID=
+Change Managed Component Library Link : Designator=SW4 Old VaultGUID=B7D15EC3-160A-466F-A46C-7801FE6295A7 New VaultGUID= Old ItemGUID=EBC1D12C-8232-4156-824C-C0951DE655D5 New ItemGUID= Old RevisionGUID=1D5E4378-CACA-417B-970E-3CCBBBA53AC5 New RevisionGUID=
+Change Managed Component Library Link : Designator=SW5 Old VaultGUID=B7D15EC3-160A-466F-A46C-7801FE6295A7 New VaultGUID= Old ItemGUID=EBC1D12C-8232-4156-824C-C0951DE655D5 New ItemGUID= Old RevisionGUID=1D5E4378-CACA-417B-970E-3CCBBBA53AC5 New RevisionGUID=
+Change Managed Component Library Link : Designator=SW6 Old VaultGUID=B7D15EC3-160A-466F-A46C-7801FE6295A7 New VaultGUID= Old ItemGUID=EBC1D12C-8232-4156-824C-C0951DE655D5 New ItemGUID= Old RevisionGUID=1D5E4378-CACA-417B-970E-3CCBBBA53AC5 New RevisionGUID=
+Change Managed Component Library Link : Designator=SW7 Old VaultGUID=B7D15EC3-160A-466F-A46C-7801FE6295A7 New VaultGUID= Old ItemGUID=EBC1D12C-8232-4156-824C-C0951DE655D5 New ItemGUID= Old RevisionGUID=1D5E4378-CACA-417B-970E-3CCBBBA53AC5 New RevisionGUID=
+Change Managed Component Library Link : Designator=SW8 Old VaultGUID=B7D15EC3-160A-466F-A46C-7801FE6295A7 New VaultGUID= Old ItemGUID=EBC1D12C-8232-4156-824C-C0951DE655D5 New ItemGUID= Old RevisionGUID=1D5E4378-CACA-417B-970E-3CCBBBA53AC5 New RevisionGUID=
+Change Managed Component Library Link : Designator=SW11 Old VaultGUID=B7D15EC3-160A-466F-A46C-7801FE6295A7 New VaultGUID= Old ItemGUID=EBC1D12C-8232-4156-824C-C0951DE655D5 New ItemGUID= Old RevisionGUID=1D5E4378-CACA-417B-970E-3CCBBBA53AC5 New RevisionGUID=
+Change Managed Component Library Link : Designator=SW12 Old VaultGUID=B7D15EC3-160A-466F-A46C-7801FE6295A7 New VaultGUID= Old ItemGUID=EBC1D12C-8232-4156-824C-C0951DE655D5 New ItemGUID= Old RevisionGUID=1D5E4378-CACA-417B-970E-3CCBBBA53AC5 New RevisionGUID=
+Change Managed Component Library Link : Designator=SW13 Old VaultGUID=B7D15EC3-160A-466F-A46C-7801FE6295A7 New VaultGUID= Old ItemGUID=EBC1D12C-8232-4156-824C-C0951DE655D5 New ItemGUID= Old RevisionGUID=1D5E4378-CACA-417B-970E-3CCBBBA53AC5 New RevisionGUID=
+Change Managed Component Library Link : Designator=SW14 Old VaultGUID=B7D15EC3-160A-466F-A46C-7801FE6295A7 New VaultGUID= Old ItemGUID=EBC1D12C-8232-4156-824C-C0951DE655D5 New ItemGUID= Old RevisionGUID=1D5E4378-CACA-417B-970E-3CCBBBA53AC5 New RevisionGUID=
+Change Managed Component Library Link : Designator=SW15 Old VaultGUID=B7D15EC3-160A-466F-A46C-7801FE6295A7 New VaultGUID= Old ItemGUID=EBC1D12C-8232-4156-824C-C0951DE655D5 New ItemGUID= Old RevisionGUID=1D5E4378-CACA-417B-970E-3CCBBBA53AC5 New RevisionGUID=
+Change Managed Component Library Link : Designator=SW16 Old VaultGUID=B7D15EC3-160A-466F-A46C-7801FE6295A7 New VaultGUID= Old ItemGUID=EBC1D12C-8232-4156-824C-C0951DE655D5 New ItemGUID= Old RevisionGUID=1D5E4378-CACA-417B-970E-3CCBBBA53AC5 New RevisionGUID=
+Change Managed Component Library Link : Designator=SW17 Old VaultGUID=B7D15EC3-160A-466F-A46C-7801FE6295A7 New VaultGUID= Old ItemGUID=EBC1D12C-8232-4156-824C-C0951DE655D5 New ItemGUID= Old RevisionGUID=1D5E4378-CACA-417B-970E-3CCBBBA53AC5 New RevisionGUID=
+Change Managed Component Library Link : Designator=SW18 Old VaultGUID=B7D15EC3-160A-466F-A46C-7801FE6295A7 New VaultGUID= Old ItemGUID=EBC1D12C-8232-4156-824C-C0951DE655D5 New ItemGUID= Old RevisionGUID=1D5E4378-CACA-417B-970E-3CCBBBA53AC5 New RevisionGUID=
+Change Managed Component Library Link : Designator=SW19 Old VaultGUID=B7D15EC3-160A-466F-A46C-7801FE6295A7 New VaultGUID= Old ItemGUID=EBC1D12C-8232-4156-824C-C0951DE655D5 New ItemGUID= Old RevisionGUID=1D5E4378-CACA-417B-970E-3CCBBBA53AC5 New RevisionGUID=
+Change Managed Component Library Link : Designator=SW20 Old VaultGUID=B7D15EC3-160A-466F-A46C-7801FE6295A7 New VaultGUID= Old ItemGUID=EBC1D12C-8232-4156-824C-C0951DE655D5 New ItemGUID= Old RevisionGUID=1D5E4378-CACA-417B-970E-3CCBBBA53AC5 New RevisionGUID=
+Change Managed Component Library Link : Designator=SW21 Old VaultGUID=B7D15EC3-160A-466F-A46C-7801FE6295A7 New VaultGUID= Old ItemGUID=EBC1D12C-8232-4156-824C-C0951DE655D5 New ItemGUID= Old RevisionGUID=1D5E4378-CACA-417B-970E-3CCBBBA53AC5 New RevisionGUID=
+Change component parameters: Designator = "SW1" ("SW1"); Footprint = "CHRY-MX1A-11NW_V"; UniqueID = "\IBBSFXFH" ("\IBBSFXFH")
+Change component parameters: Designator = "SW2" ("SW2"); Footprint = "CHRY-MX1A-11NW_V"; UniqueID = "\AWJPVBFG" ("\AWJPVBFG")
+Change component parameters: Designator = "SW3" ("SW3"); Footprint = "CHRY-MX1A-11NW_V"; UniqueID = "\RAURBSHN" ("\RAURBSHN")
+Change component parameters: Designator = "SW4" ("SW4"); Footprint = "CHRY-MX1A-11NW_V"; UniqueID = "\ZULGSEFY" ("\ZULGSEFY")
+Change component parameters: Designator = "SW5" ("SW5"); Footprint = "CHRY-MX1A-11NW_V"; UniqueID = "\GPHPMQRC" ("\GPHPMQRC")
+Change component parameters: Designator = "SW6" ("SW6"); Footprint = "CHRY-MX1A-11NW_V"; UniqueID = "\KDXUUNLO" ("\KDXUUNLO")
+Change component parameters: Designator = "SW7" ("SW7"); Footprint = "CHRY-MX1A-11NW_V"; UniqueID = "\MOAOIAGH" ("\MOAOIAGH")
+Change component parameters: Designator = "SW8" ("SW8"); Footprint = "CHRY-MX1A-11NW_V"; UniqueID = "\POEJUUVA" ("\POEJUUVA")
+Change component parameters: Designator = "SW11" ("SW11"); Footprint = "CHRY-MX1A-11NW_V"; UniqueID = "\HQXDBDQL" ("\HQXDBDQL")
+Change component parameters: Designator = "SW12" ("SW12"); Footprint = "CHRY-MX1A-11NW_V"; UniqueID = "\NLNSIULD" ("\NLNSIULD")
+Change component parameters: Designator = "SW13" ("SW13"); Footprint = "CHRY-MX1A-11NW_V"; UniqueID = "\QEPHAGJQ" ("\QEPHAGJQ")
+Change component parameters: Designator = "SW14" ("SW14"); Footprint = "CHRY-MX1A-11NW_V"; UniqueID = "\BOGUIBLI" ("\BOGUIBLI")
+Change component parameters: Designator = "SW15" ("SW15"); Footprint = "CHRY-MX1A-11NW_V"; UniqueID = "\NVUHJAOJ" ("\NVUHJAOJ")
+Change component parameters: Designator = "SW16" ("SW16"); Footprint = "CHRY-MX1A-11NW_V"; UniqueID = "\TYVDHVXJ" ("\TYVDHVXJ")
+Change component parameters: Designator = "SW17" ("SW17"); Footprint = "CHRY-MX1A-11NW_V"; UniqueID = "\NCAOVMEE" ("\NCAOVMEE")
+Change component parameters: Designator = "SW18" ("SW18"); Footprint = "CHRY-MX1A-11NW_V"; UniqueID = "\KGDCINAT" ("\KGDCINAT")
+Change component parameters: Designator = "SW19" ("SW19"); Footprint = "CHRY-MX1A-11NW_V"; UniqueID = "\ZLTHLSVD" ("\ZLTHLSVD")
+Change component parameters: Designator = "SW20" ("SW20"); Footprint = "CHRY-MX1A-11NW_V"; UniqueID = "\SOBNSQHU" ("\SOBNSQHU")
+Change component parameters: Designator = "SW21" ("SW21"); Footprint = "CHRY-MX1A-11NW_V"; UniqueID = "\MMCTKFUY" ("\MMCTKFUY")
+Added Room: Name=Schematic

@@ -1,0 +1,19 @@
+Added Component: Designator=U(MODULE_DEV-15583)
+Add component (AddParameter): Name = "Digi-Key_Part_Number"; Value = "1568-DEV-15583-ND"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Digi-Key_Purchase_URL"; Value = "https://www.digikey.com/product-detail/en/sparkfun-electronics/DEV-15583/1568-DEV-15583-ND/10384551?utm_source=snapeda&utm_medium=aggregator&utm_campaign=symbol"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MF"; Value = "SparkFun Electronics"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MP"; Value = "DEV-15583"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package"; Value = "None"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "SnapEDA_Link"; Value = "https://www.snapeda.com/parts/DEV-15583/SparkFun%20Electronics/view-part/4001229/?ref=snap"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = ""; VariantName = "[No Variations]"
+Added Pin To Net: NetName=RX1 Pin=U-0
+Added Pin To Net: NetName=TX1 Pin=U-1
+Added Pin To Net: NetName=3V3 Pin=U-3.3V_2
+Added Pin To Net: NetName=S_BUS Pin=U-8
+Added Pin To Net: NetName=SERVO_PWM Pin=U-15
+Added Pin To Net: NetName=HC_12_SET Pin=U-22
+Added Pin To Net: NetName=GND Pin=U-G1
+Added Pin To Net: NetName=GND Pin=U-G2
+Added Pin To Net: NetName=GND Pin=U-G3
+Added Pin To Net: NetName=+5 Pin=U-VIN
+Added Member To Class: ClassName=Sheet1 Member=Component U DEV-15583

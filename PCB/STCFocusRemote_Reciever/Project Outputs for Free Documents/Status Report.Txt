@@ -1,0 +1,33 @@
+Project Outputs Generation Report
+---------------------------------
+Start Output Generation At 3:33:30 PM On 7/01/2023
+
+Output: Gerber Files
+Type  : Gerber
+From  : Variant [[No Variations]] of PCB Document [Receiver.PcbDoc]
+   Generated File[Receiver.GTO]
+   Generated File[Receiver.GTS]
+   Generated File[Receiver.GTL]
+   Generated File[Receiver.GBL]
+   Generated File[Receiver.GBS]
+   Generated File[Receiver.GBP]
+   Generated File[Receiver.GBO]
+   Generated File[Receiver.GM2]
+   Generated File[Receiver.GM5]
+   Generated File[Receiver.GM13]
+   Generated File[Receiver.GM15]
+   Generated File[Receiver.GM16]
+   Generated File[Receiver.GM20]
+   Generated File[Receiver.GM21]
+   Generated File[Receiver.GM23]
+   Generated File[Receiver.GM24]
+   Generated File[Receiver.GKO]
+   Generated File[Receiver.RUL]
+   Generated File[Receiver.EXTREP]
+   Generated File[Receiver.REP]
+
+
+Files Generated   : 20
+Documents Printed : 0
+
+Finished Output Generation At 3:33:33 PM On 7/01/2023

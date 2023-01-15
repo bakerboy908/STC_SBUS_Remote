@@ -1,0 +1,13 @@
+Output: NC Drill Files
+Type  : NC Drill
+From  : PCB Document [Receiver.PcbDoc]
+   Generated File[Receiver-RoundHoles.TXT]
+   Generated File[Receiver-SlotHoles.TXT]
+   Generated File[Receiver.LDP]
+   Generated File[Receiver.DRR]
+
+
+Files Generated   : 4
+Documents Printed : 0
+
+Finished Output Generation At 3:50:14 PM On 7/01/2023
