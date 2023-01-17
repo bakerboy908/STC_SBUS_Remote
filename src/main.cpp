@@ -21,7 +21,7 @@ bfs::SbusData data;
 
 #define HC_12_SETPIN 22
 
-#define DEBOUNCE_DELAY 100
+#define DEBOUNCE_DELAY 500
 
 int ZoomPWMValDesired = 17;
 // #DEFINE PWM_8_BIT
@@ -480,7 +480,7 @@ void loop()
       delay(100);
       Serial.print("C");
       Serial.println(buttonPressed);
-      Serial1.print("C");
+      Serial1.print("CHANGE");
       Serial1.print(buttonPressed);
       Serial.println("Channel Change Requested");
       while (Serial1.available() == 0)
@@ -492,17 +492,15 @@ void loop()
       {
         byte temp = Serial1.read();
         Serial.println(temp);
-        Serial.println(buttonPressed );
-        if ((temp-'0') == buttonPressed ) // Receiver verified it got the message to change channel
+        Serial.println(buttonPressed);
+        if ((temp - '0') == buttonPressed) // Receiver verified it got the message to change channel
         {
           ChangeChannel(buttonPressed);
           ChanelChangeMode = false;
           Serial.println("Channel Change Accepted");
           while (true)
           {
-            
           }
-          
         }
       }
     }
@@ -514,16 +512,31 @@ void loop()
     static bfs::SbusData lastData;
     static int lastFocusedMapped = 0;
     static long lastLoopTime = 0;
+    static int focusHistory[6] = {0, 0, 0, 0, 0, 0};
+    static int focusHistoryIndex = 0;
     // If 10 ms has passsed since last loop
     if (millis() - lastLoopTime > 20)
     {
 
       // Focus Control
       // Read the focus know value
-      int FocusRaw = readStablePot(FOCUS_KNOB_PIN, 3);
-
+      int FocusRaw = readStablePot(FOCUS_KNOB_PIN, 2);
+      // FocusRaw = 0;
       // Map the focus know value to a SBUS value
       int FocusMapped = map(FocusRaw, 0, 1024, 462, 985);
+      // if the last 6 values of focusmapped are changing between 2 values then set focusmapped to the last value
+      focusHistory[focusHistoryIndex] = FocusMapped;
+      focusHistoryIndex++;
+      if (focusHistoryIndex >= 6)
+      {
+        focusHistoryIndex = 0;
+      }
+      if (focusHistory[0] == focusHistory[2])
+      {
+        FocusMapped = focusHistory[0];
+      }
+
+      // set the servo pwm pin to the mapped value
 
       // analogWrite(SERVO_PWM_PIN, FocusMapped);
       // set FocusMapped to sbus channel 3
@@ -540,7 +553,7 @@ void loop()
         data.ch[2] != lastData.ch[2] ||
         data.ch[3] != lastData.ch[3])
     {
-      Serial1.print("S");
+      Serial1.print("START");
       Serial1.write(data.ch[0] & 0xFF);
       Serial1.write(data.ch[0] >> 8);
 
@@ -549,7 +562,7 @@ void loop()
 
       Serial1.write(data.ch[2] & 0xFF);
       Serial1.write(data.ch[2] >> 8);
-      Serial1.print("E");
+      Serial1.print("END");
 
       // Serial1.write(data.ch[1]);
       Serial.print(data.ch[0]);
