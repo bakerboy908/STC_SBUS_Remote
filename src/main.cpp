@@ -16,7 +16,7 @@ bfs::SbusData data;
 // Data Channel 1 = Iris
 // Data Channel 2 = Focus
 #define DEFAULTS_BUTTON 2
-#define FOCUS_KNOB_PIN 21
+#define FOCUS_KNOB_PIN A0
 #define SERVO_PWM_PIN 22
 
 #define HC_12_SETPIN 22
@@ -353,7 +353,7 @@ void setup()
                          Iris_5_6, Iris_4_8, Iris_4_5, Iris_4_0, Iris_3_2, Iris_2_8};
 
   /* Serial to display data */
-  Serial.begin(115200);
+  Serial.begin(9600);
 
   /* Begin the SBUS communication */
   // sbus_rx.Begin();
@@ -363,7 +363,7 @@ void setup()
   // Define pins 2 thru 22 as inputs with pullup resistors
   for (int i = 2; i < 21; i++)
   {
-    pinMode(i, INPUT_PULLDOWN);
+    pinMode(i, INPUT);
   }
   Serial.println("Pins 2 thru 22 set as inputs with pullup resistors");
   if (digitalRead(11))
@@ -388,15 +388,15 @@ void setup()
   // Set Servo PWM pin as output
   pinMode(SERVO_PWM_PIN, OUTPUT);
   // set PWM freq to 66Hz
-  analogWriteFrequency(SERVO_PWM_PIN, 66);
+  // analogWriteFrequency(SERVO_PWM_PIN, 66);
 
-  Serial1.begin(9600);
+  // Serial1.begin(9600);
   pinMode(HC_12_SETPIN, OUTPUT);
   digitalWrite(HC_12_SETPIN, HIGH);
 
 #ifdef PWM_16_BIT
   // set PWM resolution to 15 bits
-  analogWriteResolution(15);
+  // analogWriteResolution(15);
 #endif
 
   // Setup Complete
@@ -444,25 +444,26 @@ int readStablePot(int potPin, int threshold)
 
   return potLast;
 }
-void ChangeChannel(int Channel)
-{
-  // Put HC-12 in to command mode
-  digitalWrite(HC_12_SETPIN, LOW);
-  delay(100);
-  // Send command to change channel with extra leading zeros before channel number
-  Serial1.print("AT+C");
-  Serial1.print("0");
-  Serial1.print("0");
-  Serial1.println(Channel);
+// void ChangeChannel(int Channel)
+// {
+//   // Put HC-12 in to command mode
+//   digitalWrite(HC_12_SETPIN, LOW);
+//   delay(100);
+//   // Send command to change channel with extra leading zeros before channel number
+//   Serial1.print("AT+C");
+//   Serial1.print("0");
+//   Serial1.print("0");
+//   Serial1.println(Channel);
 
-  // Wait for response
-  delay(100);
-  // Put HC-12 back in to normal mode
-  digitalWrite(HC_12_SETPIN, HIGH);
-  delay(100);
-}
+//   // Wait for response
+//   delay(100);
+//   // Put HC-12 back in to normal mode
+//   digitalWrite(HC_12_SETPIN, HIGH);
+//   delay(100);
+// }
 void loop()
 {
+
   if (ChanelChangeMode)
   {
     char array[3];
@@ -475,35 +476,35 @@ void loop()
         buttonPressed = i - 1;
       }
     }
-    if (buttonPressed != 0)
-    {
-      delay(100);
-      Serial.print("C");
-      Serial.println(buttonPressed);
-      Serial1.print("CHANGE");
-      Serial1.print(buttonPressed);
-      Serial.println("Channel Change Requested");
-      while (Serial1.available() == 0)
-      {
-        /* code */
-      }
+    // if (buttonPressed != 0)
+    // {
+    //   delay(100);
+    //   Serial.print("C");
+    //   Serial.println(buttonPressed);
+    //   Serial1.print("CHANGE");
+    //   Serial1.print(buttonPressed);
+    //   Serial.println("Channel Change Requested");
+    //   while (Serial1.available() == 0)
+    //   {
+    //     /* code */
+    //   }
 
-      while (Serial1.available())
-      {
-        byte temp = Serial1.read();
-        Serial.println(temp);
-        Serial.println(buttonPressed);
-        if ((temp - '0') == buttonPressed) // Receiver verified it got the message to change channel
-        {
-          ChangeChannel(buttonPressed);
-          ChanelChangeMode = false;
-          Serial.println("Channel Change Accepted");
-          while (true)
-          {
-          }
-        }
-      }
-    }
+    //   while (Serial1.available())
+    //   {
+    //     byte temp = Serial1.read();
+    //     Serial.println(temp);
+    //     Serial.println(buttonPressed);
+    //     if ((temp - '0') == buttonPressed) // Receiver verified it got the message to change channel
+    //     {
+    //       ChangeChannel(buttonPressed);
+    //       ChanelChangeMode = false;
+    //       Serial.println("Channel Change Accepted");
+    //       while (true)
+    //       {
+    //       }
+    //     }
+    //   }
+    // }
     // Serial1.flush();
   }
   else
@@ -520,10 +521,16 @@ void loop()
 
       // Focus Control
       // Read the focus know value
-      int FocusRaw = readStablePot(FOCUS_KNOB_PIN, 2);
+      int FocusRaw = readStablePot(FOCUS_KNOB_PIN, 10);
       // FocusRaw = 0;
       // Map the focus know value to a SBUS value
-      int FocusMapped = map(FocusRaw, 0, 1024, 462, 985);
+      //Q: what is the largest an unsigned int can be?
+      //A: 65535
+
+
+
+
+      unsigned int FocusMapped = map(FocusRaw, 0, 1024, 0, 65535);
       // if the last 6 values of focusmapped are changing between 2 values then set focusmapped to the last value
       focusHistory[focusHistoryIndex] = FocusMapped;
       focusHistoryIndex++;
@@ -543,7 +550,7 @@ void loop()
       // if (lastFocusedMapped - FocusMapped > 1 || lastFocusedMapped - FocusMapped < -1)
       // {
       lastFocusedMapped = FocusMapped;
-      data.ch[2] = FocusMapped;
+      data.ch[0] = FocusMapped;
       // }
     }
 
@@ -553,16 +560,16 @@ void loop()
         data.ch[2] != lastData.ch[2] ||
         data.ch[3] != lastData.ch[3])
     {
-      Serial1.print("START");
-      Serial1.write(data.ch[0] & 0xFF);
-      Serial1.write(data.ch[0] >> 8);
+      Serial.print("START");
+      Serial.write(data.ch[0] & 0xFF);
+      Serial.write(data.ch[0] >> 8);
 
-      Serial1.write(data.ch[1] & 0xFF);
-      Serial1.write(data.ch[1] >> 8);
+      Serial.write(data.ch[1] & 0xFF);
+      Serial.write(data.ch[1] >> 8);
 
-      Serial1.write(data.ch[2] & 0xFF);
-      Serial1.write(data.ch[2] >> 8);
-      Serial1.print("END");
+      Serial.write(data.ch[2] & 0xFF);
+      Serial.write(data.ch[2] >> 8);
+      Serial.print("END");
 
       // Serial1.write(data.ch[1]);
       Serial.print(data.ch[0]);
