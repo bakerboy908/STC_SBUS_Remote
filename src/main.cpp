@@ -2,12 +2,7 @@
 #include "sbus.h"
 #include <ADC.h>
 
-// #include "typedef.hs"
-// https://arduino-projekte.info/wp-content/uploads/2020/12/D1_mini_ESP32_pinout.jpg
-/* SBUS object, reading SBUS */
-// bfs::SbusRx sbus_rx(&Serial1);
-/* SBUS object, writing SBUS */
-// bfs::SbusTx sbus_tx(&Serial1);
+
 /* SBUS data */
 bfs::SbusData data;
 
@@ -324,25 +319,7 @@ void Defaults()
   }
 }
 
-// Function to read values from Sbus and print to serial
-// void readSbus()
-// {
-//   if (sbus_rx.Read())
-//   {
-//     /* Grab the received data */
-//     data = sbus_rx.data();
-//     /* Display the received data */
-//     for (int8_t i = 0; i < 4; i++)
-//     {
 
-//       Serial.print(" Chanel: ");
-//       Serial.print(i);
-//       Serial.print(" Data: ");
-//       Serial.print(data.ch[i]);
-//     }
-//     Serial.println();
-//   }
-// }
 bool ChanelChangeMode = false;
 void setup()
 {
@@ -485,7 +462,7 @@ void loop()
     // Read all buttons 2 thru 10
     while (buttonPressed == 0)
     {
-      /* code */
+
       for (int i = 2; i < 10; i++)
       {
         if (digitalRead(i) == HIGH)
@@ -505,7 +482,7 @@ void loop()
       Serial.println("Channel Change Requested");
       while (Serial1.available() == 0)
       {
-        /* code */
+
       }
 
       while (Serial1.available())
@@ -524,7 +501,7 @@ void loop()
         }
       }
     }
-    // Serial1.flush();
+
   }
   else
   {
@@ -539,36 +516,13 @@ void loop()
     {
 
       // Focus Control
-      // Read the focus know value
+
       int FocusRaw = readStablePot(FOCUS_KNOB_PIN, 5);
-      // FocusRaw = 0;
-      // Map the focus know value to a SBUS value
-      // Q: what is the range of a 12 bit unsighned int
-      // A: 0 to 4095
+
       int FocusMapped = map(FocusRaw, 0, 4095, 462, 985);
-      // if the last 6 values of focusmapped are changing between 2 values then set focusmapped to the last value
-      // FocusMapped = thresholdFocusMappted(FocusMapped, 1);
 
-      // focusHistory[focusHistoryIndex] = FocusMapped;
-      // focusHistoryIndex++;
-      // if (focusHistoryIndex >= 6)
-      // {
-      //   focusHistoryIndex = 0;
-      // }
-      // if (focusHistory[0] == focusHistory[2])
-      // {
-      //   FocusMapped = focusHistory[0];
-      // }
-
-      // set the servo pwm pin to the mapped value
-
-      // analogWrite(SERVO_PWM_PIN, FocusMapped);
-      // set FocusMapped to sbus channel 3
-      // if (lastFocusedMapped - FocusMapped > 1 || lastFocusedMapped - FocusMapped < -1)
-      // {
-      // lastFocusedMapped = FocusMapped;
       data.ch[2] = FocusMapped;
-      // }
+
     }
 
     // if data has changed transmit it over serial1
@@ -597,47 +551,6 @@ void loop()
       lastData = data;
     }
 
-    //   static unsigned long previousMillis = 0;
-    //   static int ZoomPWMVal = 17;
 
-    //   // save the current time
-    //   unsigned long currentMillis = millis();
-    //   // if 15ms have passed since the last time the loop ran
-    //   if (currentMillis - previousMillis >= 15)
-    //   {
-    //     // save the last time the loop ran
-    //     previousMillis = currentMillis;
-    //     // write the SBUS data
-    //     sbus_tx.data(data);
-    //     // Transmit SBUS data
-    //     sbus_tx.Write();
-    //   }
-
-    //   // Zoom Control
-    //   // If the desired zoom value is differnt from the current zoom value slowly change the zoom value until they match
-    //   // Only Check the zoom value every 500ms
-    //   static unsigned long previousMillisZoom = 0;
-    //   // save the current time
-    //   unsigned long currentMillisZoom = millis();
-    //   // if 500ms have passed since the last time the loop ran
-    //   if (currentMillisZoom - previousMillisZoom >= 1)
-    //   {
-    //     // save the last time the loop ran
-    //     previousMillisZoom = currentMillisZoom;
-    //     // Check the zoom value
-    //     if (ZoomPWMValDesired != ZoomPWMVal)
-    //     {
-    //       if (ZoomPWMValDesired > ZoomPWMVal)
-    //       {
-    //         ZoomPWMVal++;
-    //       }
-    //       else if (ZoomPWMValDesired < ZoomPWMVal)
-    //       {
-    //         ZoomPWMVal--;
-    //       }
-    //       // Update the servo PWM value
-    //       analogWrite(SERVO_PWM_PIN, ZoomPWMVal);
-    //     }
-    //   }
   }
 }
