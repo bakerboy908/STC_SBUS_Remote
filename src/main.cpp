@@ -12,7 +12,7 @@
 bfs::SbusData data;
 
 #define MAX_MESSAGE_LENGTH 100
- ADC TeensyADC;
+ADC TeensyADC;
 // Data Channel 0 = Zoom
 // Data Channel 1 = Iris
 // Data Channel 2 = Focus
@@ -367,7 +367,7 @@ void setup()
     pinMode(i, INPUT_PULLDOWN);
   }
   Serial.println("Pins 2 thru 22 set as inputs with pullup resistors");
-  if (digitalRead(11))
+  if (digitalRead(10))
   {
     Serial.println("Channel Change Mode!");
     ChanelChangeMode = true;
@@ -401,7 +401,7 @@ void setup()
 #endif
 
   // Setup Complete
- 
+
   TeensyADC.setAveraging(16);
   TeensyADC.setResolution(12);
   Serial.println("Setup Complete");
@@ -483,13 +483,18 @@ void loop()
     char array[3];
     int buttonPressed = 0;
     // Read all buttons 2 thru 10
-    for (int i = 2; i < 11; i++)
+    while (buttonPressed == 0)
     {
-      if (digitalRead(i) == HIGH)
+      /* code */
+      for (int i = 2; i < 10; i++)
       {
-        buttonPressed = i - 1;
+        if (digitalRead(i) == HIGH)
+        {
+          buttonPressed = i - 1;
+        }
       }
     }
+
     if (buttonPressed != 0)
     {
       delay(100);
@@ -538,12 +543,11 @@ void loop()
       int FocusRaw = readStablePot(FOCUS_KNOB_PIN, 5);
       // FocusRaw = 0;
       // Map the focus know value to a SBUS value
-      //Q: what is the range of a 12 bit unsighned int
-      //A: 0 to 4095
+      // Q: what is the range of a 12 bit unsighned int
+      // A: 0 to 4095
       int FocusMapped = map(FocusRaw, 0, 4095, 462, 985);
       // if the last 6 values of focusmapped are changing between 2 values then set focusmapped to the last value
       // FocusMapped = thresholdFocusMappted(FocusMapped, 1);
-
 
       // focusHistory[focusHistoryIndex] = FocusMapped;
       // focusHistoryIndex++;
