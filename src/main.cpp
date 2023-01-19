@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include "sbus.h"
+#include <ADC.h>
 
 // #include "typedef.hs"
 // https://arduino-projekte.info/wp-content/uploads/2020/12/D1_mini_ESP32_pinout.jpg
@@ -11,7 +12,7 @@
 bfs::SbusData data;
 
 #define MAX_MESSAGE_LENGTH 100
-
+ ADC TeensyADC;
 // Data Channel 0 = Zoom
 // Data Channel 1 = Iris
 // Data Channel 2 = Focus
@@ -400,7 +401,9 @@ void setup()
 #endif
 
   // Setup Complete
-
+ 
+  TeensyADC.setAveraging(16);
+  TeensyADC.setResolution(12);
   Serial.println("Setup Complete");
 }
 
@@ -435,7 +438,7 @@ int readStablePot(int potPin, int threshold)
   static int potVal = 0;
   static int potLast = 0;
 
-  potVal = analogRead(potPin);
+  potVal = TeensyADC.analogRead(potPin);
 
   if (abs(potVal - potLast) > threshold)
   { // check for significant change
@@ -443,6 +446,18 @@ int readStablePot(int potPin, int threshold)
   }
 
   return potLast;
+}
+
+int thresholdFocusMappted(int focusMapped, int threshold)
+{
+  static int focusMappedLast = 0;
+
+  if (abs(focusMapped - focusMappedLast) > threshold)
+  { // check for significant change
+    focusMappedLast = focusMapped;
+  }
+
+  return focusMappedLast;
 }
 void ChangeChannel(int Channel)
 {
@@ -520,21 +535,26 @@ void loop()
 
       // Focus Control
       // Read the focus know value
-      int FocusRaw = readStablePot(FOCUS_KNOB_PIN, 2);
+      int FocusRaw = readStablePot(FOCUS_KNOB_PIN, 5);
       // FocusRaw = 0;
       // Map the focus know value to a SBUS value
-      int FocusMapped = map(FocusRaw, 0, 1024, 462, 985);
+      //Q: what is the range of a 12 bit unsighned int
+      //A: 0 to 4095
+      int FocusMapped = map(FocusRaw, 0, 4095, 462, 985);
       // if the last 6 values of focusmapped are changing between 2 values then set focusmapped to the last value
-      focusHistory[focusHistoryIndex] = FocusMapped;
-      focusHistoryIndex++;
-      if (focusHistoryIndex >= 6)
-      {
-        focusHistoryIndex = 0;
-      }
-      if (focusHistory[0] == focusHistory[2])
-      {
-        FocusMapped = focusHistory[0];
-      }
+      // FocusMapped = thresholdFocusMappted(FocusMapped, 1);
+
+
+      // focusHistory[focusHistoryIndex] = FocusMapped;
+      // focusHistoryIndex++;
+      // if (focusHistoryIndex >= 6)
+      // {
+      //   focusHistoryIndex = 0;
+      // }
+      // if (focusHistory[0] == focusHistory[2])
+      // {
+      //   FocusMapped = focusHistory[0];
+      // }
 
       // set the servo pwm pin to the mapped value
 
@@ -542,7 +562,7 @@ void loop()
       // set FocusMapped to sbus channel 3
       // if (lastFocusedMapped - FocusMapped > 1 || lastFocusedMapped - FocusMapped < -1)
       // {
-      lastFocusedMapped = FocusMapped;
+      // lastFocusedMapped = FocusMapped;
       data.ch[2] = FocusMapped;
       // }
     }
