@@ -368,7 +368,7 @@ void setup()
   // set PWM freq to 66Hz
   analogWriteFrequency(SERVO_PWM_PIN, 66);
 
-  Serial1.begin(9600);
+  Serial1.begin(2400);
   pinMode(HC_12_SETPIN, OUTPUT);
   digitalWrite(HC_12_SETPIN, HIGH);
 
