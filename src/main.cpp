@@ -2,7 +2,6 @@
 #include "sbus.h"
 #include <ADC.h>
 
-
 /* SBUS data */
 bfs::SbusData data;
 
@@ -319,11 +318,13 @@ void Defaults()
   }
 }
 
-
 bool ChanelChangeMode = false;
 void setup()
 {
   delay(3000);
+  data.ch[0] = Zoom12Val;
+  data.ch[1] = Iris_2_8_Val;
+  data.ch[2] = 555;
   // List of all ISR functions, enables attaching ISR's in a loop
   // This Sets the order that the buttons are on the board, starting with bottom left and going clockwise
   void (*isrList[])() = {Zoom12, Zoom14, Zoom15, Zoom18, Zoom25, Zoom30, Zoom35,
@@ -384,32 +385,6 @@ void setup()
   Serial.println("Setup Complete");
 }
 
-// rolling average function
-// takes in a int and retunrs the average of the last 10 values
-int rollingAverage(int val)
-{
-  static int rollingAverageArray[10];
-  static int rollingAverageIndex = 0;
-  static int rollingAverageSum = 0;
-  static int rollingAverageCount = 0;
-  static int rollingAverageVal = 0;
-
-  rollingAverageSum -= rollingAverageArray[rollingAverageIndex];
-  rollingAverageArray[rollingAverageIndex] = val;
-  rollingAverageSum += rollingAverageArray[rollingAverageIndex];
-  rollingAverageIndex++;
-  if (rollingAverageIndex >= 10)
-  {
-    rollingAverageIndex = 0;
-  }
-  if (rollingAverageCount < 10)
-  {
-    rollingAverageCount++;
-  }
-  rollingAverageVal = rollingAverageSum / rollingAverageCount;
-  return rollingAverageVal;
-}
-
 int readStablePot(int potPin, int threshold)
 {
   static int potVal = 0;
@@ -425,17 +400,6 @@ int readStablePot(int potPin, int threshold)
   return potLast;
 }
 
-int thresholdFocusMappted(int focusMapped, int threshold)
-{
-  static int focusMappedLast = 0;
-
-  if (abs(focusMapped - focusMappedLast) > threshold)
-  { // check for significant change
-    focusMappedLast = focusMapped;
-  }
-
-  return focusMappedLast;
-}
 void ChangeChannel(int Channel)
 {
   // Put HC-12 in to command mode
@@ -453,6 +417,7 @@ void ChangeChannel(int Channel)
   digitalWrite(HC_12_SETPIN, HIGH);
   delay(100);
 }
+int ErrorCount = 0;
 void loop()
 {
   if (ChanelChangeMode)
@@ -482,7 +447,6 @@ void loop()
       Serial.println("Channel Change Requested");
       while (Serial1.available() == 0)
       {
-
       }
 
       while (Serial1.available())
@@ -501,7 +465,6 @@ void loop()
         }
       }
     }
-
   }
   else
   {
@@ -509,9 +472,8 @@ void loop()
     static bfs::SbusData lastData;
     static int lastFocusedMapped = 0;
     static long lastLoopTime = 0;
-    static int focusHistory[6] = {0, 0, 0, 0, 0, 0};
-    static int focusHistoryIndex = 0;
-    // If 10 ms has passsed since last loop
+
+    // If 20 ms has passsed since last loop
     if (millis() - lastLoopTime > 20)
     {
 
@@ -522,7 +484,6 @@ void loop()
       int FocusMapped = map(FocusRaw, 0, 4095, 462, 985);
 
       data.ch[2] = FocusMapped;
-
     }
 
     // if data has changed transmit it over serial1
@@ -541,16 +502,49 @@ void loop()
       Serial1.write(data.ch[2] & 0xFF);
       Serial1.write(data.ch[2] >> 8);
       Serial1.print("END");
+      bool searching = true;
+      // temp array for 8 bytes
+      byte temp[16];
+      while (searching)
+      {
+        delay(10);
+        // for loop to move data down one slot in temp array
+        for (auto i = 0; i < 5; i++)
+        {
+          temp[i] = temp[i + 1];
+        }
+        // read one byte from serial into back of temp array
+        temp[4] = Serial1.read();
+        // print out the temp array
 
+        if (temp[0] == 'S' && temp[1] == 'T' && temp[2] == 'A' && temp[3] == 'R' && temp[4] == 'T')
+        {
+          // if start code found, break out of while loop
+          searching = false;
+          Serial1.readBytes(temp + 5, 6);
+          // Serial.println("                                                    Start Code Found");
+          if (data.ch[0] != (temp[5] | (temp[6] << 8)) &&
+              data.ch[1] != (temp[7] | (temp[8] << 8)) &&
+              data.ch[2] != (temp[9] | (temp[10] << 8)))
+          {
+            ErrorCount++;
+          }
+        }else         if (Serial1.available() == 0)
+        {
+          searching = false;
+          ErrorCount++;
+        }
+        
+      }
       // Serial1.write(data.ch[1]);
       Serial.print(data.ch[0]);
       Serial.print(" ");
       Serial.print(data.ch[1]);
       Serial.print(" ");
-      Serial.println(data.ch[2]);
+      Serial.print(data.ch[2]);
+      Serial.print(" Error Count: ");
+      Serial.println(ErrorCount);
       lastData = data;
     }
-
-
   }
 }
