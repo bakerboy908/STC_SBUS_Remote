@@ -528,6 +528,7 @@ void loop()
               data.ch[2] != (temp[9] | (temp[10] << 8)))
           {
             ErrorCount++;
+            data.ch[3]++; // Increment unused channel to force data to be resent
           }
         }else         if (Serial1.available() == 0)
         {
