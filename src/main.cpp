@@ -55,6 +55,7 @@ void Zoom12()
     ZoomPWMValDesired = Zoom12Val;
     data.ch[0] = Zoom12Val;
     Serial.println("Zoom 12");
+    data.ch[3]++; 
   }
 }
 
@@ -69,6 +70,7 @@ void Zoom14()
     ZoomPWMValDesired = Zoom14Val;
     data.ch[0] = Zoom14Val;
     Serial.println("Zoom 14");
+    data.ch[3]++; 
   }
 }
 
@@ -83,6 +85,7 @@ void Zoom15()
     ZoomPWMValDesired = Zoom15Val;
     data.ch[0] = Zoom15Val;
     Serial.println("Zoom 15");
+    data.ch[3]++; 
   }
 }
 
@@ -97,6 +100,7 @@ void Zoom18()
     ZoomPWMValDesired = Zoom18Val;
     data.ch[0] = Zoom18Val;
     Serial.println("Zoom 18");
+    data.ch[3]++; 
   }
 }
 
@@ -111,6 +115,7 @@ void Zoom25()
     ZoomPWMValDesired = Zoom25Val;
     data.ch[0] = Zoom25Val;
     Serial.println("Zoom 25");
+    data.ch[3]++; 
   }
 }
 
@@ -125,6 +130,7 @@ void Zoom30()
     ZoomPWMValDesired = Zoom30Val;
     data.ch[0] = Zoom30Val;
     Serial.println("Zoom 30");
+    data.ch[3]++; 
   }
 }
 
@@ -139,6 +145,7 @@ void Zoom35()
     ZoomPWMValDesired = Zoom35Val;
     data.ch[0] = Zoom35Val;
     Serial.println("Zoom 35");
+    data.ch[3]++; 
   }
 }
 
@@ -153,6 +160,7 @@ void Zoom40()
     ZoomPWMValDesired = Zoom40Val;
     data.ch[0] = Zoom40Val;
     Serial.println("Zoom 40");
+    data.ch[3]++; 
   }
 }
 // 10 int16_t values for Iris possitions
@@ -181,6 +189,7 @@ void Iris_2_8()
     lastpressedTime = pressedTime;
     data.ch[1] = Iris_2_8_Val;
     Serial.println("Iris 2.8");
+    data.ch[3]++; 
   }
 }
 
@@ -194,6 +203,7 @@ void Iris_3_2()
     lastpressedTime = pressedTime;
     data.ch[1] = Iris_3_2_Val;
     Serial.println("Iris 3.2");
+    data.ch[3]++; 
   }
 }
 
@@ -207,6 +217,7 @@ void Iris_4_0()
     lastpressedTime = pressedTime;
     data.ch[1] = Iris_4_0_Val;
     Serial.println("Iris 4.0");
+    data.ch[3]++; 
   }
 }
 
@@ -220,6 +231,7 @@ void Iris_4_5()
     lastpressedTime = pressedTime;
     data.ch[1] = Iris_4_5_Val;
     Serial.println("Iris 4.5");
+    data.ch[3]++; 
   }
 }
 
@@ -233,6 +245,7 @@ void Iris_4_8()
     lastpressedTime = pressedTime;
     data.ch[1] = Iris_4_8_Val;
     Serial.println("Iris 4.8");
+    data.ch[3]++; 
   }
 }
 
@@ -246,6 +259,7 @@ void Iris_5_6()
     lastpressedTime = pressedTime;
     data.ch[1] = Iris_5_6_Val;
     Serial.println("Iris 5.6");
+    data.ch[3]++; 
   }
 }
 
@@ -259,6 +273,7 @@ void Iris_6_2()
     lastpressedTime = pressedTime;
     data.ch[1] = Iris_6_2_Val;
     Serial.println("Iris 6.2");
+    data.ch[3]++; 
   }
 }
 
@@ -272,6 +287,7 @@ void Iris_6_7()
     lastpressedTime = pressedTime;
     data.ch[1] = Iris_6_7_Val;
     Serial.println("Iris 6.7");
+    data.ch[3]++; 
   }
 }
 
@@ -285,6 +301,7 @@ void Iris_7_3()
     lastpressedTime = pressedTime;
     data.ch[1] = Iris_7_3_Val;
     Serial.println("Iris 7.3");
+    data.ch[3]++; 
   }
 }
 
@@ -298,6 +315,7 @@ void Iris_8_7()
     lastpressedTime = pressedTime;
     data.ch[1] = Iris_8_7_Val;
     Serial.println("Iris 8.7");
+    data.ch[3]++; 
   }
 }
 // Default values for the Zoom and Iris
@@ -315,6 +333,7 @@ void Defaults()
     data.ch[0] = ZoomPWMValDesired;
     data.ch[1] = Iris_2_8_Val;
     Serial.println("Defaults");
+    data.ch[3]++; 
   }
 }
 
@@ -480,6 +499,7 @@ void loop()
       // Focus Control
 
       int FocusRaw = readStablePot(FOCUS_KNOB_PIN, 5);
+      FocusRaw = 0;
 
       int FocusMapped = map(FocusRaw, 0, 4095, 462, 985);
 
@@ -492,6 +512,10 @@ void loop()
         data.ch[2] != lastData.ch[2] ||
         data.ch[3] != lastData.ch[3])
     {
+      
+
+
+      Serial1.flush();
       Serial1.print("START");
       Serial1.write(data.ch[0] & 0xFF);
       Serial1.write(data.ch[0] >> 8);
@@ -512,9 +536,10 @@ void loop()
       Serial1.write(checksum >> 8);
       
       Serial1.print("END");
+      lastData = data;
       bool searching = true;
       // temp array for 8 bytes
-      byte temp[16];
+      byte temp[16]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
       while (searching)
       {
         delay(10);
@@ -544,6 +569,7 @@ void loop()
         {
           searching = false;
           ErrorCount++;
+          data.ch[3]++; // Increment unused channel to force data to be resent
         }
         
       }
@@ -553,9 +579,10 @@ void loop()
       Serial.print(data.ch[1]);
       Serial.print(" ");
       Serial.print(data.ch[2]);
+      Serial.print(" ");
+      Serial.print(data.ch[3]);
       Serial.print(" Error Count: ");
       Serial.println(ErrorCount);
-      lastData = data;
     }
   }
 }
