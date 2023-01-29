@@ -501,6 +501,16 @@ void loop()
 
       Serial1.write(data.ch[2] & 0xFF);
       Serial1.write(data.ch[2] >> 8);
+
+      //Generate Checksunm
+      uint16_t checksum = 0;
+      checksum += data.ch[0];
+      checksum += data.ch[1];
+      checksum += data.ch[2];
+      // Write Checksum
+      Serial1.write(checksum & 0xFF);
+      Serial1.write(checksum >> 8);
+      
       Serial1.print("END");
       bool searching = true;
       // temp array for 8 bytes
