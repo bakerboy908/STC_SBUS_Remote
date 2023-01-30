@@ -499,7 +499,7 @@ void loop()
       // Focus Control
 
       int FocusRaw = readStablePot(FOCUS_KNOB_PIN, 5);
-      FocusRaw = 0;
+
 
       int FocusMapped = map(FocusRaw, 0, 4095, 462, 985);
 
