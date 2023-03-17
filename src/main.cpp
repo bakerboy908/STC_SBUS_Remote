@@ -18,7 +18,7 @@ ADC TeensyADC;
 
 #define DEBOUNCE_DELAY 500
 
-int ZoomPWMValDesired = 17;
+int16_t ZoomPWMValDesired = 17;
 // #DEFINE PWM_8_BIT
 #define PWM_16_BIT
 // 8 int values for Zoom possitions
@@ -517,8 +517,10 @@ void loop()
 
       Serial1.flush();
       Serial1.print("START");
-      Serial1.write(data.ch[0] & 0xFF);
-      Serial1.write(data.ch[0] >> 8);
+      // Serial1.write(data.ch[0] & 0xFF);
+      // Serial1.write(data.ch[0] >> 8);
+      Serial1.write(ZoomPWMValDesired &0xFF);
+      Serial1.write(ZoomPWMValDesired >> 8 & 0xFF);
 
       Serial1.write(data.ch[1] & 0xFF);
       Serial1.write(data.ch[1] >> 8);
@@ -563,13 +565,13 @@ void loop()
               data.ch[2] != (temp[9] | (temp[10] << 8)))
           {
             ErrorCount++;
-            data.ch[3]++; // Increment unused channel to force data to be resent
+            // data.ch[3]++; // Increment unused channel to force data to be resent
           }
         }else         if (Serial1.available() == 0)
         {
           searching = false;
           ErrorCount++;
-          data.ch[3]++; // Increment unused channel to force data to be resent
+          // data.ch[3]++; // Increment unused channel to force data to be resent
         }
         
       }
